@@ -183,7 +183,7 @@
     <span class="neon-line neon-white" id="line2"></span>
     <p class="author" id="author"></p>
   </div>
-  <button class="refresh-btn" id="refresh-btn">— goon</button>
+  <button class="refresh-btn" id="refresh-btn">— goons</button>
 
   <script>
     let quotes = [];
@@ -237,12 +237,14 @@
     }
 
     function setBtn(n) {
-      document.getElementById('refresh-btn').textContent = n.toLocaleString() + ' goon';
+      document.getElementById('refresh-btn').textContent = n.toLocaleString() + ' goons';
     }
+
+    const WORKER = 'https://goon-counter.sol-posta.workers.dev';
 
     async function incrementCounter() {
       try {
-        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/up/');
+        const res = await fetch(WORKER + '/increment');
         const data = await res.json();
         setBtn(data.count);
       } catch (e) {}
@@ -250,7 +252,7 @@
 
     async function fetchCounter() {
       try {
-        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/');
+        const res = await fetch(WORKER + '/count');
         const data = await res.json();
         setBtn(data.count);
       } catch (e) {}
