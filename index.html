@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goon Simulator</title>
+  <title>Goon Garden</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style>
@@ -123,20 +123,21 @@
       transform: translateX(-50%);
       font-family: 'Times New Roman', Times, serif;
       font-size: 1rem;
-      color: #888;
-      background: none;
-      border: 1px solid #444;
-      border-radius: 20px;
-      padding: 8px 24px;
+      color: #aaa;
+      background: #222;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 20px;
       cursor: pointer;
       letter-spacing: 0.1em;
-      transition: color 0.2s, border-color 0.2s;
+      transition: background 0.2s, color 0.2s;
       white-space: nowrap;
     }
     .refresh-btn:hover {
-      color: #ccc;
-      border-color: #888;
+      background: #2e2e2e;
+      color: #ddd;
     }
+
 
     @keyframes flicker-red {
       0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
@@ -176,13 +177,13 @@
   </style>
 </head>
 <body>
-  <p class="presenter">White Chapel &amp; Alfredo Jaar presents</p>
+  <p class="presenter">White Chapel &amp; Alfredo Jaar present</p>
   <div class="neon-sign">
     <span class="neon-line neon-red" id="line1"></span>
     <span class="neon-line neon-white" id="line2"></span>
     <p class="author" id="author"></p>
   </div>
-  <button class="refresh-btn" id="refresh-btn">next</button>
+  <button class="refresh-btn" id="refresh-btn">— goon</button>
 
   <script>
     let quotes = [];
@@ -235,9 +236,26 @@
       });
     }
 
+    async function incrementCounter() {
+      try {
+        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/up');
+        const data = await res.json();
+        document.getElementById('refresh-btn').textContent = data.value.toLocaleString() + ' goon';
+      } catch (e) {}
+    }
+
+    async function fetchCounter() {
+      try {
+        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses');
+        const data = await res.json();
+        document.getElementById('refresh-btn').textContent = data.value.toLocaleString() + ' goon';
+      } catch (e) {}
+    }
+
     function nextQuote() {
       currentIndex = (currentIndex + 1) % quotes.length;
       showQuote(currentIndex);
+      incrementCounter();
     }
 
     document.getElementById('refresh-btn').addEventListener('click', nextQuote);
@@ -245,6 +263,7 @@
     loadQuotes().then(() => {
       document.fonts.ready.then(() => showQuote(0));
     });
+    fetchCounter();
 
     window.addEventListener('resize', equalizeLines);
   </script>
