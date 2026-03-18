@@ -236,19 +236,23 @@
       });
     }
 
+    function setBtn(n) {
+      document.getElementById('refresh-btn').textContent = n.toLocaleString() + ' goon';
+    }
+
     async function incrementCounter() {
       try {
-        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/up');
+        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/up/');
         const data = await res.json();
-        document.getElementById('refresh-btn').textContent = data.value.toLocaleString() + ' goon';
+        setBtn(data.count);
       } catch (e) {}
     }
 
     async function fetchCounter() {
       try {
-        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses');
+        const res = await fetch('https://api.counterapi.dev/v1/goongarden/presses/');
         const data = await res.json();
-        document.getElementById('refresh-btn').textContent = data.value.toLocaleString() + ' goon';
+        setBtn(data.count);
       } catch (e) {}
     }
 
