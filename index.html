@@ -253,7 +253,9 @@
     }
 
     function nextQuote() {
-      currentIndex = (currentIndex + 1) % quotes.length;
+      let next;
+      do { next = Math.floor(Math.random() * quotes.length); } while (quotes.length > 1 && next === currentIndex);
+      currentIndex = next;
       showQuote(currentIndex);
       incrementCounter();
     }
